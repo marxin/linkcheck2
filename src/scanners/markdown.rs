@@ -38,9 +38,9 @@ pub fn markdown_with_broken_link_callback<'a>(
     )
     .into_offset_iter()
     .filter_map(|(event, range)| match event {
-        Event::Start(Tag::Link(_, dest, _))
-        | Event::Start(Tag::Image(_, dest, _)) => Some((
-            dest.to_string(),
+        Event::Start(Tag::Link { dest_url, .. })
+        | Event::Start(Tag::Image { dest_url, .. }) => Some((
+            dest_url.to_string(),
             Span::new(range.start as u32, range.end as u32),
         )),
         _ => None,
@@ -74,7 +74,8 @@ mod tests {
         ];
 
         let got: Vec<_> =
-            markdown_with_broken_link_callback(src, Some(&mut |_| None)).collect();
+            markdown_with_broken_link_callback(src, Some(&mut |_| None))
+                .collect();
 
         assert_eq!(got, should_be);
     }
