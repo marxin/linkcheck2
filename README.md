@@ -12,6 +12,8 @@ A library for extracting and validating links.
 For insight into how this crate is designed and was implemented, you may want to
 read [the original blog post][blog].
 
+This is a **fork** of the [linkcheck](https://github.com/Michael-F-Bryan/linkcheck) crate.
+
 ## License
 
 This project is licensed under either of

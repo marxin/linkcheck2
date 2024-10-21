@@ -1,7 +1,10 @@
 [package]
-name = "linkcheck"
+name = "linkcheck2"
 version = "0.4.1"
-authors = ["Michael-F-Bryan <michaelfbryan@gmail.com>"]
+authors = [
+    "Michael-F-Bryan <michaelfbryan@gmail.com>",
+    "Martin Liška <martin.liska@hey.com>",
+]
 license = "MIT OR Apache-2.0"
 edition = "2021"
 repository = "https://github.com/Michael-F-Bryan/linkcheck"
