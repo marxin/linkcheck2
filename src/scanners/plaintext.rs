@@ -9,7 +9,7 @@ use linkify::{LinkFinder, LinkKind};
 /// # use codespan::Span;
 /// let src = "hello http://localhost/ world. this is file://some/text";
 ///
-/// let got: Vec<_> = linkcheck::scanners::plaintext(src).collect();
+/// let got: Vec<_> = linkcheck2::scanners::plaintext(src).collect();
 ///
 /// assert_eq!(got.len(), 2);
 /// let (url, span) = got[0];

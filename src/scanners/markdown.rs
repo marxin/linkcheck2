@@ -9,7 +9,7 @@ use pulldown_cmark::{BrokenLink, CowStr, Event, Options, Parser, Tag};
 /// # use codespan::Span;
 /// let src = "This is a [link](https://example.com/) and an ![Image](img.png)";
 ///
-/// let got: Vec<_> = linkcheck::scanners::markdown(src).collect();
+/// let got: Vec<_> = linkcheck2::scanners::markdown(src).collect();
 ///
 /// assert_eq!(got.len(), 2);
 /// let (href, span) = &got[0];

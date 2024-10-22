@@ -9,7 +9,7 @@
 //! If you were validating links in batches, this is one way to go about it:
 //!
 //! ```rust
-//! use linkcheck::{Link, BasicContext};
+//! use linkcheck2::{Link, BasicContext};
 //! use std::path::Path;
 //! use codespan::Files;
 //!
@@ -25,7 +25,7 @@
 //! let file_id = files.add("blah.md", src);
 //!
 //! // we then need to extract all the links and their location in the document
-//! let links = linkcheck::scanners::markdown(src);
+//! let links = linkcheck2::scanners::markdown(src);
 //!
 //! // at the moment we just have a stream of (&str, Span)... To give nice
 //! // diagnostics we need to turn this into a stream of Links that know which
@@ -46,7 +46,7 @@
 //! let ctx = BasicContext::default();
 //!
 //! // and now we can run the validation step!
-//! let result = linkcheck::validate(current_dir, links, &ctx).await;
+//! let result = linkcheck2::validate(current_dir, links, &ctx).await;
 //!
 //! assert!(result.invalid.is_empty());
 //! assert_eq!(result.valid.len(), 2);
