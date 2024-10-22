@@ -1,9 +1,9 @@
 # Linkcheck
 
-[![Continuous integration](https://github.com/Michael-F-Bryan/linkcheck/workflows/Continuous%20integration/badge.svg?branch=master)](https://github.com/Michael-F-Bryan/linkcheck/actions)
-[![Docs.rs Badge](https://docs.rs/linkcheck/badge.svg)](https://docs.rs/linkcheck)
-[![Crates.io](https://img.shields.io/crates/v/linkcheck)](https://crates.io/crates/linkcheck)
-![Crates.io](https://img.shields.io/crates/l/linkcheck)
+[![Continuous integration](https://github.com/marxin/linkcheck2/workflows/Continuous%20integration/badge.svg?branch=main)](https://github.com/marxin/linkcheck2/actions)
+[![Docs.rs Badge](https://docs.rs/linkcheck2/badge.svg)](https://docs.rs/linkcheck2)
+[![Crates.io](https://img.shields.io/crates/v/linkcheck2)](https://crates.io/crates/linkcheck2)
+![Crates.io](https://img.shields.io/crates/l/linkcheck2)
 
 ([API Docs])
 
@@ -38,6 +38,5 @@ conditions.
 The intent of this crate is to be free of soundness bugs. The developers will
 do their best to avoid them, and welcome help in analysing and fixing them.
 
-[API Docs]: https://michael-f-bryan.github.io/linkcheck
 [crev]: https://github.com/crev-dev/cargo-crev
 [blog]: http://adventures.michaelfbryan.com/posts/linkchecker/
