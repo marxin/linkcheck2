@@ -5,8 +5,6 @@
 [![Crates.io](https://img.shields.io/crates/v/linkcheck2)](https://crates.io/crates/linkcheck2)
 ![Crates.io](https://img.shields.io/crates/l/linkcheck2)
 
-([API Docs])
-
 A library for extracting and validating links.
 
 For insight into how this crate is designed and was implemented, you may want to
