@@ -8,20 +8,21 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        rust:
+        toolchain:
           - nightly
           - stable
           - 1.70.0
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4      
-      - name: Install stable
-        uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+      - name: Install ${{ matrix.toolchain }}
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: ${{ matrix.toolchain }}
           components: rustfmt
       # TODO: enable once the differences are resolved
       #- name: cargo fmt --check
       #  run: cargo fmt --check
-      - run: cargo check
       - run: cargo build
+      - run: cargo test
 
