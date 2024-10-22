@@ -11,7 +11,6 @@ jobs:
         toolchain:
           - nightly
           - stable
-          - 1.70.0
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
