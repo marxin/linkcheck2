@@ -68,10 +68,6 @@
     missing_copy_implementations
 )]
 
-#[cfg(test)]
-#[macro_use]
-extern crate pretty_assertions;
-
 pub mod scanners;
 pub mod validation;
 
@@ -141,8 +137,7 @@ impl Category {
 }
 
 /// A link to some other resource.
-#[derive(Debug, Clone, PartialEq)]
-#[cfg_attr(feature = "serde-1", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[non_exhaustive]
 pub struct Link {
     /// The link itself.
