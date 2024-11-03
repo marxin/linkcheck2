@@ -99,9 +99,7 @@ impl Category {
             return None;
         }
 
-        let mailto_prefix = "mailto:";
-        if src.starts_with(mailto_prefix) {
-            let address = &src[mailto_prefix.len()..];
+        if let Some(address) = src.strip_prefix("mailto:") {
             return Some(Category::MailTo(address.to_string()));
         }
 
@@ -109,9 +107,9 @@ impl Category {
             return Some(Category::Url(url));
         }
 
-        if src.starts_with("#") {
+        if let Some(fragment) = src.strip_prefix("#") {
             return Some(Category::CurrentFile {
-                fragment: String::from(&src[1..]),
+                fragment: fragment.to_string(),
             });
         }
 

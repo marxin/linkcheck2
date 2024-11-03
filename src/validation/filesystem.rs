@@ -124,6 +124,8 @@ where
     Ok(())
 }
 
+type ValidationFn = Arc<dyn Fn(&Path, Option<&str>) -> Result<(), Reason>>;
+
 /// Options to be used with [`resolve_link()`].
 #[derive(Clone)]
 #[cfg_attr(
@@ -139,7 +141,7 @@ pub struct Options {
     // case insensitive
     alternate_extensions: HashMap<String, Vec<OsString>>,
     #[serde(skip, default = "nop_custom_validation")]
-    custom_validation: Arc<dyn Fn(&Path, Option<&str>) -> Result<(), Reason>>,
+    custom_validation: ValidationFn,
 }
 
 impl Options {
@@ -151,8 +153,7 @@ impl Options {
     pub fn default_alternate_extensions(
     ) -> impl IntoIterator<Item = (OsString, impl IntoIterator<Item = OsString>)>
     {
-        const MAPPING: &'static [(&'static str, &'static [&'static str])] =
-            &[("md", &["html"])];
+        const MAPPING: &[(&str, &[&str])] = &[("md", &["html"])];
 
         MAPPING.iter().map(|(ext, alts)| {
             (OsString::from(ext), alts.iter().map(OsString::from))
@@ -180,7 +181,7 @@ impl Options {
 
     /// Get the root directory, if one was provided.
     pub fn root_directory(&self) -> Option<&Path> {
-        self.root_directory.as_ref().map(|p| &**p)
+        self.root_directory.as_deref()
     }
 
     /// Set the [`Options::root_directory()`], automatically converting to its
@@ -391,10 +392,7 @@ impl Options {
     }
 }
 
-fn nop_custom_validation(
-) -> Arc<dyn Fn(&Path, Option<&str>) -> Result<(), Reason>> {
-    Arc::new(|_, _| Ok(()))
-}
+fn nop_custom_validation() -> ValidationFn { Arc::new(|_, _| Ok(())) }
 
 impl Default for Options {
     fn default() -> Self { Options::new() }

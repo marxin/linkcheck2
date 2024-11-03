@@ -39,13 +39,13 @@ where
 {
     log::debug!("Checking \"{}\" on the web", url);
 
-    if already_valid(&url, ctx) {
+    if already_valid(url, ctx) {
         log::debug!("The cache says \"{}\" is still valid", url);
         return Ok(());
     }
 
     let result =
-        head(ctx.client(), url.clone(), ctx.url_specific_headers(&url)).await;
+        head(ctx.client(), url.clone(), ctx.url_specific_headers(url)).await;
 
     if let Some(fragment) = url.fragment() {
         // TODO: check the fragment
