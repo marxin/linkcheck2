@@ -171,7 +171,7 @@ impl Options {
                 .map(|(key, values)| {
                     (
                         key.to_string_lossy().to_lowercase(),
-                        values.into_iter().map(Into::into).collect(),
+                        values.into_iter().collect(),
                     )
                 })
                 .collect(),
