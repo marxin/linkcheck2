@@ -78,15 +78,21 @@ use http::uri::PathAndQuery;
 use std::path::PathBuf;
 use url::Url;
 
+/// Category of a Link
 #[derive(Debug, Clone, PartialEq, Eq)]
-enum Category {
+pub enum Category {
     /// A local file.
     FileSystem {
+        /// Path
         path: PathBuf,
+        /// A fragment of a local file.
         fragment: Option<String>,
     },
     /// A link to somewhere else in the current document.
-    CurrentFile { fragment: String },
+    CurrentFile {
+        /// A fragment of a current file.
+        fragment: String,
+    },
     /// A URL for something on the web.
     Url(Url),
     /// A `mailto:` link.
@@ -156,7 +162,10 @@ impl Link {
         }
     }
 
-    fn category(&self) -> Option<Category> { Category::categorise(&self.href) }
+    /// Return category for a link.
+    pub fn category(&self) -> Option<Category> {
+        Category::categorise(&self.href)
+    }
 }
 
 #[cfg(test)]
