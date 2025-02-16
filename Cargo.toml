@@ -1,6 +1,6 @@
 [package]
 name = "linkcheck2"
-version = "0.7.0"
+version = "0.8.0"
 authors = [
     "Michael-F-Bryan <michaelfbryan@gmail.com>",
     "Martin Liška <martin.liska@hey.com>",
@@ -19,7 +19,7 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 codespan = "0.11.1"
 linkify = "0.10.0"
-pulldown-cmark = "0.12.2"
+pulldown-cmark = "0.13.0"
 reqwest = "0.12.11"
 futures = "0.3.31"
 log = "0.4.22"
