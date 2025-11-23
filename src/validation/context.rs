@@ -27,7 +27,7 @@ pub trait Context {
     /// concurrently. This [`MutexGuard`] is guaranteed to be short lived (just
     /// the duration of a [`Cache::insert()`] or [`Cache::lookup()`]), so it's
     /// okay to use a [`std::sync::Mutex`] instead of [`futures::lock::Mutex`].
-    fn cache(&self) -> Option<MutexGuard<Cache>> { None }
+    fn cache(&self) -> Option<MutexGuard<'_, Cache>> { None }
 
     /// How many items should we check at a time?
     fn concurrency(&self) -> usize { 64 }
@@ -88,7 +88,7 @@ impl Context for BasicContext {
 
     fn filesystem_options(&self) -> &Options { &self.options }
 
-    fn cache(&self) -> Option<MutexGuard<Cache>> {
+    fn cache(&self) -> Option<MutexGuard<'_, Cache>> {
         Some(self.cache.lock().expect("Mutex was poisoned"))
     }
 }

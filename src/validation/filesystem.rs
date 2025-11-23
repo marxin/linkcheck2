@@ -439,8 +439,8 @@ impl PartialEq for Options {
 }
 
 fn remove_absolute_components(
-    path: &Path,
-) -> impl Iterator<Item = Component> + '_ {
+    path: &'_ Path,
+) -> impl Iterator<Item = Component<'_>> + '_ {
     path.components()
         .skip_while(|c| matches!(c, Component::Prefix(_) | Component::RootDir))
 }
