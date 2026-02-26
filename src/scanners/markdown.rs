@@ -33,7 +33,9 @@ pub fn markdown_with_broken_link_callback<'a>(
 ) -> impl Iterator<Item = (String, Span)> + 'a {
     Parser::new_with_broken_link_callback(
         src,
-        Options::ENABLE_FOOTNOTES,
+        Options::ENABLE_FOOTNOTES
+            | Options::ENABLE_GFM
+            | Options::ENABLE_TASKLISTS,
         on_broken_link,
     )
     .into_offset_iter()
@@ -139,17 +141,7 @@ See this[^missing].
 > [!CAUTION]
 > This is a caution
         "#;
-        check_links(
-            src,
-            &[],
-            &[
-                ("!NOTE", 3..10),
-                ("!TIP", 31..37),
-                ("!IMPORTANT", 57..69),
-                ("!WARNING", 93..103),
-                ("!CAUTION", 127..137),
-            ],
-        );
+        check_links(src, &[], &[]);
     }
 
     #[test]
@@ -164,7 +156,7 @@ See this[^missing].
                 ("https://example.com/one", Span::new(18, 50)),
                 ("https://example.com/two", Span::new(66, 98)),
             ],
-            &[("x", 53..56)],
+            &[],
         );
     }
 }
