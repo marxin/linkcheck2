@@ -106,4 +106,65 @@ mod tests {
             &[],
         );
     }
+
+    #[test]
+    fn footnote_links() {
+        let src = r#"
+See this[^example].
+
+See this[^missing].
+
+[^example]: This is a footnote with a [link](https://example.com).
+        "#;
+        // Note, broken footnote links are not currently caught, see
+        // https://github.com/pulldown-cmark/pulldown-cmark/issues/1072.
+        check_links(src, &[("https://example.com", Span::new(81, 108))], &[]);
+    }
+
+    #[test]
+    fn admonitions() {
+        let src = r#"
+> [!NOTE]
+> This is a note
+
+> [!TIP]
+> This is a tip
+
+> [!IMPORTANT]
+> This is important
+
+> [!WARNING]
+> This is a warning
+
+> [!CAUTION]
+> This is a caution
+        "#;
+        check_links(
+            src,
+            &[],
+            &[
+                ("!NOTE", 3..10),
+                ("!TIP", 31..37),
+                ("!IMPORTANT", 57..69),
+                ("!WARNING", 93..103),
+                ("!CAUTION", 127..137),
+            ],
+        );
+    }
+
+    #[test]
+    fn tasklists() {
+        let src = r#"
+- [ ] Incomplete [link1](https://example.com/one)
+- [x] Complete [link2](https://example.com/two)
+        "#;
+        check_links(
+            src,
+            &[
+                ("https://example.com/one", Span::new(18, 50)),
+                ("https://example.com/two", Span::new(66, 98)),
+            ],
+            &[("x", 53..56)],
+        );
+    }
 }
