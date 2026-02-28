@@ -20,7 +20,7 @@ maintenance = { status = "actively-developed" }
 codespan = "0.13.1"
 linkify = "0.10.0"
 pulldown-cmark = "0.13.0"
-reqwest = "0.12.11"
+reqwest = "0.13.2"
 futures = "0.3.31"
 log = "0.4.22"
 thiserror = "2.0.9"
