@@ -33,7 +33,9 @@ pub fn markdown_with_broken_link_callback<'a>(
 ) -> impl Iterator<Item = (String, Span)> + 'a {
     Parser::new_with_broken_link_callback(
         src,
-        Options::ENABLE_FOOTNOTES,
+        Options::ENABLE_FOOTNOTES
+            | Options::ENABLE_GFM
+            | Options::ENABLE_TASKLISTS,
         on_broken_link,
     )
     .into_offset_iter()
@@ -50,6 +52,38 @@ pub fn markdown_with_broken_link_callback<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::ops::Range;
+
+    #[track_caller]
+    fn check_links(
+        input: &str,
+        expected_links: &[(&'static str, Span)],
+        expected_broken_links: &[(&'static str, Range<usize>)],
+    ) {
+        let mut actual_broken_links = Vec::new();
+        let actual_links: Vec<_> = markdown_with_broken_link_callback(
+            input,
+            Some(&mut |broken_link| {
+                actual_broken_links.push((
+                    broken_link.reference.to_string(),
+                    broken_link.span,
+                ));
+                None
+            }),
+        )
+        .collect();
+
+        let actual_links_refs: Vec<_> = actual_links
+            .iter()
+            .map(|(s, span)| (s.as_str(), *span))
+            .collect();
+        let actual_broken_links: Vec<_> = actual_broken_links
+            .iter()
+            .map(|(s, span)| (s.as_str(), span.clone()))
+            .collect();
+        assert_eq!(actual_links_refs, expected_links);
+        assert_eq!(actual_broken_links, expected_broken_links);
+    }
 
     #[test]
     fn detect_common_links_in_markdown() {
@@ -63,20 +97,66 @@ mod tests {
 
 [nowhere]: https://dev.null/
         "#;
-        let should_be = vec![
-            (String::from("https://example.com"), Span::new(17, 44)),
-            (String::from("https://dev.null/"), Span::new(55, 76)),
-            (String::from("../README.md"), Span::new(82, 102)),
-            (
-                String::from("https://imgur.com/gallery/f28OkrB"),
-                Span::new(130, 183),
-            ),
-        ];
+        check_links(
+            src,
+            &[
+                ("https://example.com", Span::new(17, 44)),
+                ("https://dev.null/", Span::new(55, 76)),
+                ("../README.md", Span::new(82, 102)),
+                ("https://imgur.com/gallery/f28OkrB", Span::new(130, 183)),
+            ],
+            &[],
+        );
+    }
 
-        let got: Vec<_> =
-            markdown_with_broken_link_callback(src, Some(&mut |_| None))
-                .collect();
+    #[test]
+    fn footnote_links() {
+        let src = r#"
+See this[^example].
 
-        assert_eq!(got, should_be);
+See this[^missing].
+
+[^example]: This is a footnote with a [link](https://example.com).
+        "#;
+        // Note, broken footnote links are not currently caught, see
+        // https://github.com/pulldown-cmark/pulldown-cmark/issues/1072.
+        check_links(src, &[("https://example.com", Span::new(81, 108))], &[]);
+    }
+
+    #[test]
+    fn admonitions() {
+        let src = r#"
+> [!NOTE]
+> This is a note
+
+> [!TIP]
+> This is a tip
+
+> [!IMPORTANT]
+> This is important
+
+> [!WARNING]
+> This is a warning
+
+> [!CAUTION]
+> This is a caution
+        "#;
+        check_links(src, &[], &[]);
+    }
+
+    #[test]
+    fn tasklists() {
+        let src = r#"
+- [ ] Incomplete [link1](https://example.com/one)
+- [x] Complete [link2](https://example.com/two)
+        "#;
+        check_links(
+            src,
+            &[
+                ("https://example.com/one", Span::new(18, 50)),
+                ("https://example.com/two", Span::new(66, 98)),
+            ],
+            &[],
+        );
     }
 }
